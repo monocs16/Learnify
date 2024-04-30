@@ -1,0 +1,191 @@
+/****** Script para creacion de base de datos ******/
+USE [master]
+GO
+/****** Object:  Database [Learnify]    Script Date: 27/4/2024 19:31:47 ******/
+CREATE DATABASE [Learnify]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'Learnify', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Learnify.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'Learnify_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\Learnify_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [Learnify] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [Learnify].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [Learnify] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [Learnify] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [Learnify] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [Learnify] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [Learnify] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [Learnify] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [Learnify] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [Learnify] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [Learnify] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [Learnify] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [Learnify] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [Learnify] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [Learnify] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [Learnify] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [Learnify] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [Learnify] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [Learnify] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [Learnify] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [Learnify] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [Learnify] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [Learnify] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [Learnify] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [Learnify] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [Learnify] SET  MULTI_USER 
+GO
+ALTER DATABASE [Learnify] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [Learnify] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [Learnify] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [Learnify] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [Learnify] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [Learnify] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [Learnify] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [Learnify] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [Learnify]
+GO
+/****** Object:  Table [dbo].[Cursos]    Script Date: 27/4/2024 19:31:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Cursos](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](100) NULL,
+	[Descripcion] [nvarchar](max) NULL,
+	[Costo] [decimal](10, 2) NULL,
+	[DuracionSemanas] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 27/4/2024 19:31:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [nvarchar](50) NULL,
+	[Password] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 27/4/2024 19:31:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[AuthenticateUser]
+    @Username NVARCHAR(50),
+    @Password NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF EXISTS (SELECT * FROM Users WHERE Username = @Username AND Password = @Password)
+        SELECT 1 AS Authenticated;
+    ELSE
+        SELECT 0 AS Authenticated;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarUsuario]    Script Date: 27/4/2024 19:31:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[InsertarUsuario]
+    @Username NVARCHAR(50),
+    @Password NVARCHAR(50)
+AS
+BEGIN
+    -- Insertar el nuevo usuario en la tabla
+    INSERT INTO Users (Username, Password)
+    VALUES (@Username, @Password);
+
+    -- Devolver un valor de éxito (puedes personalizarlo según tus necesidades)
+    RETURN 1;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ModificarCurso]    Script Date: 27/4/2024 19:31:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[ModificarCurso]
+    @Id INT,
+    @NuevoNombre NVARCHAR(100),
+    @NuevaDescripcion NVARCHAR(MAX),
+    @NuevoCosto DECIMAL(10, 2),
+    @NuevaDuracionSemanas INT
+AS
+BEGIN
+    UPDATE Cursos
+    SET
+        Nombre = @NuevoNombre,
+        Descripcion = @NuevaDescripcion,
+        Costo = @NuevoCosto,
+        DuracionSemanas = @NuevaDuracionSemanas
+    WHERE
+        Id = @Id;
+END;
+GO
+/****** Object:  StoredProcedure [dbo].[ObtenerCursos]    Script Date: 27/4/2024 19:31:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[ObtenerCursos]
+AS
+BEGIN
+    SELECT Id, Nombre, Descripcion, Costo, DuracionSemanas
+    FROM Cursos;
+END;
+GO
+USE [master]
+GO
+ALTER DATABASE [Learnify] SET  READ_WRITE 
+GO
