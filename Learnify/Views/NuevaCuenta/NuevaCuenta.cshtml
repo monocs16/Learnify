@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewBag.Title = "NuevaCuenta";
+}
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Nueva Cuenta</title>
+    <style>
+        
+        .btn {
+            background-color: white;
+            color: #3E98ED;
+            border-color: #3E98ED;
+            font-family: Poppins, sans-serif;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+            .btn:hover {
+                background-color: #3E98ED;
+                text-decoration: none;
+                color: white;
+            }
+            table{
+                margin:auto;
+            }
+            .td{
+                text-align:right;
+            }
+
+    </style>
+</head>
+<body>
+    <h2>CREAR UNA CUENTA NUEVA</h2>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
+
+
+
+    <form id="createAccountForm" method="post">
+        <table>
+            <tr>
+                <td class="td"><label for="nombre">Nombre:</label></td>
+                <td><input type="text" id="nombre" name="nombre" required /></td>
+            </tr>
+            <tr>
+                <td class="td"><label for="correo">Correo:</label></td>
+                <td><input type="email" id="correo" name="correo" required pattern="[a-z0-9._%+-]+&#64;[a-z0-9.-]+\.[a-z]{2,}$" /></td>
+            </tr>
+            <tr>
+                <td class="td"><label for="usuario">Usuario:</label></td>
+                <td><input type="text" id="Username" name="usuario" required /></td>
+            </tr>
+            <tr>
+                <td class="td"><label for="contrasena">Contraseña:</label></td>
+                <td><input type="password" id="Password" name="contrasena" required /></td>
+            </tr>
+            <tr>
+                <td><input class="btn" type="submit" value="Crear" /></td>
+                <td class="td"><input class="btn" type="button" value="Cancelar" onclick="cancelCreation()" /></td>
+            </tr>
+        </table>
+    </form>
+
+
+
+
+
+
+    @*<form id="createAccountForm" method="post">
+        <div style="text-align:center">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required />
+        </div>
+        <div style="text-align:justify">
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" name="correo" required pattern="[a-z0-9._%+-]+&#64;[a-z0-9.-]+\.[a-z]{2,}$" />
+            <small>Ejemplo: usuario@dominio.com</small>
+        </div>
+        <div style="text-align:center">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="Username" name="usuario" required />
+        </div>
+        <div style="text-align:center">
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="Password" name="contrasena" required />
+        </div>
+        <div style="text-align:center">
+            <input class="btn" type="submit" value="Crear" />
+            <input class="btn" type="button" value="Cancelar" onclick="cancelCreation()" />
+        </div>
+    </form>*@
+
+
+
+
+
+    <script>
+        function cancelCreation() {
+            alert("Creación de cuenta cancelada")
+            window.location.href = '@Url.Action("Cursos", "Cursos")';
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+

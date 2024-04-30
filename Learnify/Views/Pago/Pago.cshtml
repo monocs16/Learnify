@@ -1,0 +1,182 @@
+﻿
+@{
+    ViewBag.Title = "Pago";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pago</title>
+    <style>
+        /* Estilos para la tabla */
+        table {
+            border-collapse: collapse; /* Combina los bordes de las celdas */
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd; /* Agrega un borde de 1px a todas las celdas */
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2; /* Color de fondo para las celdas del encabezado */
+        }
+        .btn {
+            background-color: white;
+            color: #3E98ED;
+            border-color: #3E98ED;
+            font-family: Poppins, sans-serif;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+            .btn:hover {
+                background-color: #3E98ED;
+                text-decoration: none;
+                color: white;
+            }
+
+        table {
+            border-collapse: collapse; /* Combina los bordes de las celdas */
+            width: 100%;
+        }
+        /*Tipo de letra de la tabla*/
+        .table {
+            font-size: 25px;
+            font-family: Poppins, sans-serif;
+        }
+
+            .table th {
+                text-align: center; /* Centra el texto horizontalmente */
+                vertical-align: middle; /* Centra el contenido verticalmente */
+                background-color: #3E98ED;
+                color: white;
+            }
+
+            .table td {
+                text-align: center; /* Centra el texto horizontalmente */
+                vertical-align: middle; /* Centra el contenido verticalmente */
+            }
+        
+    </style>
+</head>
+<body>
+    <h2>REALIZAR MATRÍCULA</h2>
+
+    <div>
+        <label for="curso">Curso:</label>
+        <select id="curso" name="curso">
+            <option value="">Selecciona un curso</option>
+            <option value="Programación Web Avanzada">Programación Web Avanzada</option>
+            <option value="Introducción a la Inteligencia Artificial">Introducción a la Inteligencia Artificial</option>
+            <option value="Diseño Gráfico para Principiantes">Diseño Gráfico para Principiantes</option>
+            <!-- Agrega más opciones aquí -->
+        </select>
+    </div>
+    <div>
+        <label for="costo">Costo:</label>
+        <span id="costo"></span>
+    </div>
+    <div>
+        <label for="duracion">Duración:</label>
+        <span id="duracion"></span>
+    </div><br />
+    <div>    
+        <input class="btn" type="button" value="Agregar al carrito" onclick="agregarACarrito()" />
+    </div><br />
+    <h2>CARRITO DE COMPRAS</h2>
+
+
+
+
+
+    <!-- Agrega una tabla para mostrar los cursos seleccionados -->
+    <table class="table" id="tablaCursos">
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th>Costo</th>
+                <th>Duración</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se añadirán las filas dinámicamente -->
+        </tbody>
+    </table><br />
+    <div>
+        <input class="btn" type="submit" value="Matricular" onclick="enviarPago()" />
+        <input class="btn" type="button" value="Cancelar matricula" onclick="cancelPayment()" />
+    </div>
+    <script>
+        document.getElementById("curso").addEventListener("change", function () {
+            var cursoSeleccionado = this.value;
+            var cursos = [
+                { nombre: "Programación Web Avanzada", costo: "₡200", duracion: "12 semanas" },
+                { nombre: "Introducción a la Inteligencia Artificial", costo: "₡150", duracion: "10 semanas" },
+                { nombre: "Diseño Gráfico para Principiantes", costo: "₡100", duracion: "8 semanas" },
+                // Agrega más cursos aquí
+            ];
+
+            var curso = cursos.find(function (c) {
+                return c.nombre === cursoSeleccionado;
+            });
+
+            document.getElementById("costo").innerText = curso ? curso.costo : "";
+            document.getElementById("duracion").innerText = curso ? curso.duracion : "";
+        });
+
+        function enviarPago() {
+            // Verificar si la tabla está vacía
+            var tablaCursos = document.getElementById("tablaCursos");
+            var filasTabla = tablaCursos.getElementsByTagName("tr");
+            if (filasTabla.length <= 1) {
+                alert("No has seleccionado ningún curso para matricular.");
+                return;
+            }
+
+            // Si la tabla no está vacía, mostrar el mensaje de matrícula
+            alert("Se envió la solicitud de matrícula. Pronto un asesor se estará comunicando. Gracias");
+            window.location.href = '@Url.Action("Cursos", "Cursos")';
+        }
+
+        function cancelPayment() {
+            alert("Matricula cancelada");
+            window.location.href = '@Url.Action("Cursos", "Cursos")';
+        }
+
+        function agregarACarrito() {
+            var cursoSeleccionado = document.getElementById("curso").value;
+            var costo = document.getElementById("costo").innerText;
+            var duracion = document.getElementById("duracion").innerText;
+
+            if (!cursoSeleccionado) {
+                alert("Por favor selecciona un curso antes de agregarlo al carrito.");
+                return;
+            }
+
+            // Añadir fila a la tabla
+            var tabla = document.getElementById("tablaCursos").getElementsByTagName('tbody')[0];
+            var newRow = tabla.insertRow(tabla.rows.length);
+            var cellCurso = newRow.insertCell(0);
+            var cellCosto = newRow.insertCell(1);
+            var cellDuracion = newRow.insertCell(2);
+            cellCurso.innerHTML = cursoSeleccionado;
+            cellCosto.innerHTML = costo;
+            cellDuracion.innerHTML = duracion;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

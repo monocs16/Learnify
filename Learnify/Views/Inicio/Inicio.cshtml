@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Inicio";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iniciar sesión</title>
+    <style>
+
+        .btn {
+            background-color: white;
+            color: #3E98ED;
+            border-color: #3E98ED;
+            font-family: Poppins, sans-serif;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+            .btn:hover {
+                background-color: #3E98ED;
+                text-decoration: none;
+                color: white;
+            }
+
+
+    </style>
+</head>
+<body>
+    <h2>PARA MATRICULAR EL CURSO NECESITAS INICIAR SESIÓN</h2>
+    @if (ViewBag.Message != null && ViewBag.Message != "")
+    {
+        <label>@ViewBag.Message</label>
+    }
+    <br />
+
+    <form id="loginForm" method="post" action="/Inicio/Inicio">
+        <div style="text-align:center">
+            <label for="username">Usuario:</label>
+            <input type="text" id="username" name="username" required />
+            <!-- Agregado el atributo required para hacer obligatorio este campo -->
+        </div>
+        <div style="text-align:center">
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required />
+            <!-- Agregado el atributo required para hacer obligatorio este campo -->
+        </div>
+        <br />
+        <div style="text-align:center">
+            <input class="btn" type="submit" value="Iniciar sesión" />
+            <a class="btn" href="/NuevaCuenta/NuevaCuenta">Crear nueva cuenta</a>
+        </div>
+      
+    </form>
+
+    <script>
+        function cancelPayment() {
+            document.getElementById("paymentForm").style.display = "none";
+        }
+    </script>
+</body>
+</html>
+
+
+
